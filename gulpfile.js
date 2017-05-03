@@ -13,8 +13,10 @@ const config = require('./config');
 const copy = require('copy');
 const serverFactory = require('spa-server');
 const combiner = require('stream-combiner2');
+const rm = require('gulp-rm');
+const replace = require('replace-in-file');
 
-gulp.task('default',['webserver','browser-sync','pack','pug','less'],function(){
+gulp.task('default',['webserver','browser-sync','pack','pug','less','watch'],function(){
 
 });
 
@@ -76,7 +78,39 @@ gulp.task('webserver',function(){
 	server.start();
 })
 
-gulp.watch(config.watchEs6Src,['pack']);
-gulp.watch(config.watchpugSrc,['pug']);
-gulp.watch(config.watchLessSrc,['less']);
-gulp.watch(config.distSrc,browserSync.reload);
+gulp.task('replace',function(){
+	replace(config.initReplaceOption, (error, changedFiles) => {
+		if (error) {
+	    	return console.error('Error occurred:', error);
+		}
+		console.log('Modified files:', changedFiles.join(', '));
+	});
+})
+
+gulp.task('rename',['replace'],function(){//还不如自己用node写呢
+	for(var i = 0;i < config.initRename.length;i++){
+		+function(i){
+			var combined = combiner.obj([
+				gulp.src(config.initRename[i]),
+				rename({
+					basename:config.fileName,
+				}),
+				gulp.dest(config.initRename[i].substring(0,config.initRename[i].indexOf('demo')))
+			])
+		}(i)
+	}
+})
+
+gulp.task('init',['rename'],function(){
+	var combined = combiner.obj([
+		gulp.src('**/demo.*'),
+		rm()
+	])
+})
+
+gulp.task('watch',function(){//之前这些没有写在这个作用域，而是写在全局作用徐，执行其他的人去，gulp也不退出
+	gulp.watch(config.watchEs6Src,['pack']);
+	gulp.watch(config.watchpugSrc,['pug']);
+	gulp.watch(config.watchLessSrc,['less']);
+	gulp.watch(config.distSrc,browserSync.reload);
+})

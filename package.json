@@ -17,7 +17,9 @@
   "devDependencies": {
     "copy": "^0.3.0",
     "gulp-pug": "^3.3.0",
+    "gulp-rm": "^1.0.2",
     "pug": "^2.0.0-beta.12",
+    "replace-in-file": "^2.5.0",
     "spa-server": "^1.0.0",
     "stream-combiner2": "^1.1.1"
   },

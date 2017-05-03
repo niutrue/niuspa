@@ -20,5 +20,16 @@ module.exports = {
 	'htmlSrc':'dist/',
 	'lessSrc':'dev/less/' + config.fileName + '.less',
 	'cssSrc':'dist/css/',
-	'distAdd':'dist/**/*.*'
+	'distAdd':'dist/**/*.*',
+	'initRename':['dev/es6/demo.js','dev/less/demo.less','dev/pug/demo.pug'],
+	'initReplaceOption':{
+		files:[
+			'dev/pug/demo.pug',
+			'dev/pug/js.pug',
+			'dev/pug/css.pug'
+		],
+		from:'demo',
+		to:config.fileName
+	},
+	'fileName':config.fileName
 }
