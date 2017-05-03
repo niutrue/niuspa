@@ -1,7 +1,7 @@
 "use strict";
 var config = {
 	port:88,
-	fileName:'flow'
+	fileName:'demo'
 }
 module.exports = {
 	'pagePort':config.port,
