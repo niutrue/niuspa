@@ -1,6 +1,6 @@
 "use strict";
 var config = {
-	port:88,
+	port:3500,
 	fileName:'demo'
 }
 module.exports = {

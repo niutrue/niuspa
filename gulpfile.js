@@ -27,21 +27,32 @@ gulp.task('browser-sync',function(){
 });
 
 gulp.task('es6to5',function(){
-	return gulp.src(config.esTransBegin)
-		.pipe(babel({
+	var combined = combiner.obj([
+		gulp.src(config.esTransBegin),
+		babel({
 			presets:[es2015Preset]
-		}))
-		.pipe(gulp.dest(config.esTransEnd));
+		}),
+		gulp.dest(config.esTransEnd)
+	]);
+
+	combined.on('error',console.error.bind(console));
+	return combined;
 });
+
 gulp.task('pack',['es6to5'],function(){//任务a依赖任务长时b
-	gulp.src(config.packBegin)
-		.pipe(browserify())
-		// .pipe(uglify())
-		.pipe(rename({
+	var combined = combiner.obj([
+		gulp.src(config.packBegin),
+		browserify(),
+		// uglify(),
+		rename({
 			basename:config.renameBasename,
 			suffix:config.renameSuffix
-		}))
-		.pipe(gulp.dest(config.packEnd))
+		}),
+		gulp.dest(config.packEnd)
+	]);
+
+	combined.on('error',console.error.bind(console));
+	return combined;
 });
 
 gulp.task('pug',function(){
