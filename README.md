@@ -1,10 +1,12 @@
 # niuspa
-a scaffold for efficiently develop single page application.
+A scaffold that is used to develop the single page application in a efficient way.
 # How to use
-1.npm install
 
-2.use your filename and port to write config.json
+## basic usage
+1.run `npm install` in CLI to install dependencies that the scaffold needs.
 
-3.gulp init
+2.specify you own file name and port in the config.js,unless you want to use the default file name called 'demo'.
 
-4.gulp.you can begin to develop
+3.run `gulp init` in ClI if you do the second step.
+
+4.run `gulp` in CLI to develop!
