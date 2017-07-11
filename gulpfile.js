@@ -13,12 +13,18 @@ const replace = require('replace-in-file');//文件中替换字符串
 const combiner = require('stream-combiner2');//错误处理
 const browserSync = require('browser-sync').create();//浏览器实时刷新，响应文件变化
 const serverFactory = require('spa-server');//单页应用使用的服务器
+const exec = require('child_process').exec;
 const config = require('./config');//配置文件
 
 //使用脚手架
-gulp.task('default',['webserver','browser-sync','pack','pug','less','watch'],function(){
-	console.log('启动完毕！');
+gulp.task('default',['transform','webserver','browser-sync','watch'],function(){
+	//console.log('启动完毕！');
 });
+
+//转换es6,pug,less
+gulp.task('transform',['pack','pug','less'],function(){
+	//console.log('文件转换成功');
+})
 
 //js打包，依赖es6转es5任务
 gulp.task('pack',['es6to5'],function(){//任务a依赖任务长时b
@@ -104,11 +110,21 @@ gulp.task('watch',function(){
 });
 
 //初始化，重命名原有文件
-gulp.task('init',['rename'],function(){
+gulp.task('init',['rmfile'],function(){
+	exec('gulp transform',function(){
+		console.log('初始化成功');
+	});
+});
+
+//删除默认的文件
+gulp.task('rmfile',['rename'],function(){
 	var combined = combiner.obj([
 		gulp.src('**/demo.*'),
 		rm()
-	])
+	]);
+
+	combined.on('error',console.error.bind(console));
+	return combined;
 });
 
 //重命名文件
