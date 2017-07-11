@@ -1,2 +1,2 @@
-var ss = 8;
-console.log('xxx');
+var sayHi = 'Hi!';
+console.log(sayHi);

@@ -1,44 +1,26 @@
 "use strict";
-const gulp = require('gulp');
-const babel = require('gulp-babel');
-const es2015Preset = require('babel-preset-es2015-node5');
-const browserify = require('gulp-browserify');
-const uglify = require('gulp-uglify');
-const rename = require('gulp-rename');
-const pug = require('gulp-pug');
-const prettify = require('gulp-jsbeautifier');
-const less = require('gulp-less');
-const browserSync = require('browser-sync').create();
-const config = require('./config');
-const copy = require('copy');
-const serverFactory = require('spa-server');
-const combiner = require('stream-combiner2');
-const rm = require('gulp-rm');
-const replace = require('replace-in-file');
+const gulp = require('gulp');//使用gulp
+const babel = require('gulp-babel');//es6转es5
+const es2015Preset = require('babel-preset-es2015-node5');//es6转es5
+const browserify = require('gulp-browserify');//js打包
+const uglify = require('gulp-uglify');//js混淆压缩
+const rename = require('gulp-rename');//文件重命名
+const pug = require('gulp-pug');//使用pug文件
+const prettify = require('gulp-jsbeautifier');//文件格式美化
+const less = require('gulp-less');//使用less文件
+const rm = require('gulp-rm');//删除文件
+const replace = require('replace-in-file');//文件中替换字符串
+const combiner = require('stream-combiner2');//错误处理
+const browserSync = require('browser-sync').create();//浏览器实时刷新，响应文件变化
+const serverFactory = require('spa-server');//单页应用使用的服务器
+const config = require('./config');//配置文件
 
+//使用脚手架
 gulp.task('default',['webserver','browser-sync','pack','pug','less','watch'],function(){
-
+	console.log('启动完毕！');
 });
 
-gulp.task('browser-sync',function(){
-	browserSync.init({
-		proxy:config.pageLink
-	})
-});
-
-gulp.task('es6to5',function(){
-	var combined = combiner.obj([
-		gulp.src(config.esTransBegin),
-		babel({
-			presets:[es2015Preset]
-		}),
-		gulp.dest(config.esTransEnd)
-	]);
-
-	combined.on('error',console.error.bind(console));
-	return combined;
-});
-
+//js打包，依赖es6转es5任务
 gulp.task('pack',['es6to5'],function(){//任务a依赖任务长时b
 	var combined = combiner.obj([
 		gulp.src(config.packBegin),
@@ -55,6 +37,21 @@ gulp.task('pack',['es6to5'],function(){//任务a依赖任务长时b
 	return combined;
 });
 
+//es6转成es5
+gulp.task('es6to5',function(){
+	var combined = combiner.obj([
+		gulp.src(config.esTransBegin),
+		babel({
+			presets:[es2015Preset]
+		}),
+		gulp.dest(config.esTransEnd)
+	]);
+
+	combined.on('error',console.error.bind(console));
+	return combined;
+});
+
+//pug转html，并且美化格式
 gulp.task('pug',function(){
 	var combined = combiner.obj([
 		gulp.src(config.pugSrc),
@@ -67,8 +64,9 @@ gulp.task('pug',function(){
 
 	combined.on('error',console.error.bind(console));
 	return combined;
-})
+});
 
+//less转css
 gulp.task('less',function(){
 	var combined = combiner.obj([
 		gulp.src(config.lessSrc),
@@ -78,8 +76,9 @@ gulp.task('less',function(){
 
 	combined.on('error',console.error.bind(console));
 	return combined;
-})
+});
 
+//开启服务器
 gulp.task('webserver',function(){
 	var server = serverFactory.create({
 		path:'./',
@@ -87,18 +86,33 @@ gulp.task('webserver',function(){
 	});
 
 	server.start();
-})
+});
 
-gulp.task('replace',function(){
-	replace(config.initReplaceOption, (error, changedFiles) => {
-		if (error) {
-	    	return console.error('Error occurred:', error);
-		}
-		console.log('Modified files:', changedFiles.join(', '));
+//刷新浏览器
+gulp.task('browser-sync',function(){
+	browserSync.init({
+		proxy:config.pageLink
 	});
-})
+});
 
-gulp.task('rename',['replace'],function(){//还不如自己用node写呢
+//监视文件变化，执行响应的任务
+gulp.task('watch',function(){
+	gulp.watch(config.watchEs6Src,['pack']);
+	gulp.watch(config.watchpugSrc,['pug']);
+	gulp.watch(config.watchLessSrc,['less']);
+	gulp.watch(config.distSrc,browserSync.reload);
+});
+
+//初始化，重命名原有文件
+gulp.task('init',['rename'],function(){
+	var combined = combiner.obj([
+		gulp.src('**/demo.*'),
+		rm()
+	])
+});
+
+//重命名文件
+gulp.task('rename',['replace'],function(){//
 	for(var i = 0;i < config.initRename.length;i++){
 		+function(i){
 			var combined = combiner.obj([
@@ -110,18 +124,14 @@ gulp.task('rename',['replace'],function(){//还不如自己用node写呢
 			])
 		}(i)
 	}
-})
+});
 
-gulp.task('init',['rename'],function(){
-	var combined = combiner.obj([
-		gulp.src('**/demo.*'),
-		rm()
-	])
-})
-
-gulp.task('watch',function(){//之前这些没有写在这个作用域，而是写在全局作用徐，执行其他的人去，gulp也不退出
-	gulp.watch(config.watchEs6Src,['pack']);
-	gulp.watch(config.watchpugSrc,['pug']);
-	gulp.watch(config.watchLessSrc,['less']);
-	gulp.watch(config.distSrc,browserSync.reload);
-})
+//替换文件中的字符换
+gulp.task('replace',function(){
+	replace(config.initReplaceOption, (error, changedFiles) => {
+		if (error) {
+	    	return console.error('Error occurred:', error);
+		}
+		console.log('Modified files:', changedFiles.join(', '));
+	});
+});
