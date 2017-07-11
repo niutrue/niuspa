@@ -112,7 +112,7 @@ gulp.task('init',['rename'],function(){
 });
 
 //重命名文件
-gulp.task('rename',['replace'],function(){//
+gulp.task('rename',['replace'],function(){
 	for(var i = 0;i < config.initRename.length;i++){
 		+function(i){
 			var combined = combiner.obj([
@@ -126,12 +126,13 @@ gulp.task('rename',['replace'],function(){//
 	}
 });
 
-//替换文件中的字符换
+//替换文件中的字符串
 gulp.task('replace',function(){
-	replace(config.initReplaceOption, (error, changedFiles) => {
-		if (error) {
-	    	return console.error('Error occurred:', error);
-		}
-		console.log('Modified files:', changedFiles.join(', '));
-	});
+	try {
+		const changedFiles = replace.sync(config.initReplaceOption);
+		console.log('Modifued files:',changedFiles.join(','));
+	}
+	catch (error){
+		console.error('Error occurrred',error);
+	}
 });
