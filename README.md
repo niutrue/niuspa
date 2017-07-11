@@ -1,5 +1,5 @@
 # niuspa
-a scaffold for efficiently develop single page
+a scaffold for efficiently develop single page application.
 # How to use
 1.npm install
 
