@@ -32,8 +32,8 @@ module.exports = {
 	'initReplaceOption':{
 		files:[
 			'src/pug/demo.pug',
-			'src/pug/js.pug',
-			'src/pug/css.pug'
+			'src/pug/js/js.pug',
+			'src/pug/css/css.pug'
 		],
 		from:'demo',
 		to:config.fileName
