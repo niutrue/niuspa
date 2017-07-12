@@ -13,3 +13,19 @@ A scaffold that is used to develop the single page application in an efficient w
 3.run `gulp init` in ClI if you do the second step.
 
 4.run `gulp` in CLI to develop!
+
+5.run `gulp build` in CLI to produce the code that used to deploy.
+
+## more infomation
+
+1.gulpfile.js is divided into some parts ,and you can write a new part depend on your particular need.Benefit is to avoid a large gulpfile.js.
+
+2.developer write the code in src folder.the code in the dev folder is runing in browser when you developing.the code in dist is used to deploy.
+
+# feature
+
+1.support es6.the js code will be packed.
+2.support less.you can use less to write css.
+3.support pug.to use pug.
+4.the browser will be refreshed automatically when you modify you code.
+5.provide a server environment for single page application.
