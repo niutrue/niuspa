@@ -25,7 +25,11 @@ A scaffold that is used to develop the single page application in an efficient w
 # feature
 
 1.support es6.the js code will be packed.
+
 2.support less.you can use less to write css.
+
 3.support pug.to use pug.
+
 4.the browser will be refreshed automatically when you modify you code.
+
 5.provide a server environment for single page application.
