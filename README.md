@@ -22,6 +22,8 @@ A scaffold that is used to develop the single page application in an efficient w
 
 2.developer write the code in src folder.the code in the dev folder is runing in browser when you developing.the code in dist is used to deploy.
 
+3.the third parts js files and images should be put in the dev folder
+
 # feature
 
 1.support es6.the js code will be packed.
