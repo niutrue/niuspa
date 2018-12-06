@@ -7,7 +7,7 @@ module.exports = {
 	//单页面在浏览器中的连接
 	'pageLink':'http://localhost:' + config.port + '/dev/' + config.fileName + '.html',
 	//es6转es5的起始位置
-	'esTransBegin':'src/es6/*.js',
+	'esTransBegin':'src/es6/**/*.js',
 	'esTransEnd':'src/es5',
 	//将js打包的起始位置
 	'packBegin':'src/es5/' + config.fileName + '.js',
