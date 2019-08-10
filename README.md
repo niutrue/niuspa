@@ -1,6 +1,6 @@
 # niuspa
 
-A scaffold that is used to js library in an efficient way.
+A scaffold that is used to develop js library in an efficient way.
 
 # How to use
 
