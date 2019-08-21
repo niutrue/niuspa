@@ -1,3 +1,5 @@
+# 额，发现已经不能用了。
+
 # niuspa
 
 A scaffold that is used to develop js library in an efficient way.
